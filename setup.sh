@@ -1,0 +1,3 @@
+export RATE_CAPABILITY_DATA=$ME0DIR/data
+export RATE_CAPABILITY_RESULTS=$ME0DIR/results
+export PATH=$PATH:$ME0DIR/code
