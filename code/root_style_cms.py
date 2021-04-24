@@ -1,5 +1,7 @@
 import ROOT as rt
 
+rt.gROOT.SetBatch(rt.kTRUE)
+
 def drawCmsPreliminaryLabel(x, y):
     latex = rt.TLatex()
     latex.SetTextSize(.055)
