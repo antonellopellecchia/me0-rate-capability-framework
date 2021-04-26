@@ -31,10 +31,12 @@ def main():
         except FileExistsError: pass
 
     chamberGainCurve = measurement.GainCurve(gainFile)
-    chamberGain = chamberGainCurve.Get(options.dividerCurrent)
-    print('%d chamber gain'%(chamberGain))
+    chamberGain, errChamberGain = chamberGainCurve.GetGain(options.dividerCurrent), chamberGainCurve.GetError(options.dividerCurrent)
+    print(f'{chamberGain} ± {errChamberGain} chamber gain')
 
-    meas = measurement.Measurement.FromFile(measurementFile, chamberGainCurve, options.dividerCurrent)
+    meas = measurement.Measurement.FromFile(measurementFile, chamberGainCurve, options.dividerCurrent, 'piecewiseSaturation')
+    '''for dataTaking in meas:
+        if dataTaking.name=='Tree15cm': dataTaking.linearizationMethod = 'saturation'''
     
     for dataTaking in meas: # fit current plots separately for each xray-to-chamber distance
         path = f'{outputDirectory}/{dataTaking.name}'
@@ -69,7 +71,7 @@ def main():
         legend.AddEntry(g, title, 'p')
 
     rateCapabilityCanvas = rt.TCanvas('RateCapabilityCanvas', '', 800, 600)
-    rateCapabilityGraph.SetTitle(';Rate (Hz/mm^{2});Effective gain')
+    rateCapabilityGraph.SetTitle(';Rate (kHz/cm^{2});Effective gain')
     rateCapabilityGraph.Draw('a')
     rateCapabilityCanvas.SetGrid()
     rateCapabilityCanvas.SetLogx()
